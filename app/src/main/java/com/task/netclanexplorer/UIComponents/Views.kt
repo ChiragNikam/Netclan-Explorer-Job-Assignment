@@ -1,7 +1,7 @@
 package com.task.netclanexplorer.UIComponents
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,12 +15,17 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,27 +36,35 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import com.task.netclanexplorer.Model.PersonalViewData
 import com.task.netclanexplorer.R
-import com.task.netclanexplorer.ui.theme.NetclanExplorerTheme
 
 @Composable
 fun PersonSwipableView(modifier: Modifier = Modifier, viewData: PersonalViewData) {
     Surface(modifier = modifier.fillMaxSize()) {
-        PersonalView(viewData)
+        Column(modifier = Modifier.fillMaxWidth()) {
+            SearchBox()
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                items(5) {
+                    PersonalView(viewData)
+                }
+            }
+        }
     }
 }
 
@@ -70,7 +83,7 @@ fun PersonalView(viewData: PersonalViewData) {
                 .padding(start = 30.dp, end = 8.dp)
                 .heightIn(min = 166.dp, max = 250.dp)
                 .fillMaxWidth()
-                .shadow(4.dp, shape = RoundedCornerShape(30.dp))
+                .shadow(2.dp, shape = RoundedCornerShape(30.dp))
                 .background(
                     MaterialTheme.colorScheme.onPrimary,
                     shape = RoundedCornerShape(30.dp)
@@ -144,14 +157,14 @@ fun PersonalView(viewData: PersonalViewData) {
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = viewData.oneLineIntro,
+                        text = viewData.purpose,
                         fontSize = 12.sp,
                         fontWeight = FontWeight(700),
                         color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = viewData.message,
+                        text = viewData.status,
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -187,7 +200,59 @@ fun PersonalView(viewData: PersonalViewData) {
 
 @Composable
 fun SearchBox() {
-
+    var text by rememberSaveable {
+        mutableStateOf("")
+    }
+    BasicTextField(
+        modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp, top = 18.dp),
+        value = text,
+        maxLines = 1,
+        singleLine = true,
+        onValueChange = { text = it },
+        decorationBox = { innerTextField ->
+            Box(
+                modifier = Modifier
+                    .border(
+                        1.dp,
+                        Color.Gray,
+                        shape = RoundedCornerShape(18.dp)
+                    )
+                    .height(30.dp)
+                    .background(
+                        MaterialTheme.colorScheme.onPrimary,
+                        shape = RoundedCornerShape(18.dp)
+                    )
+                    .padding(start = 20.dp, end = 10.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = "search",
+                        tint = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column(modifier = Modifier.widthIn(min = 290.dp, max = 290.dp)) {
+                        innerTextField()
+                    }
+                    if (text.isNotEmpty()) {
+                        IconButton(
+                            onClick = { text = "" }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = "clear all",
+                                tint = Color.Gray
+                            )
+                        }
+                    }
+                }
+            }
+        })
 }
 
 @Composable
@@ -310,7 +375,7 @@ fun BusinessView(viewData: PersonalViewData) {
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = viewData.message,
+                        text = viewData.status,
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -356,7 +421,7 @@ fun ToolbarHome(onClickRefine: () -> Unit) {
         title = {
             Column {
                 Text(
-                    "Howdy Chirag Nikam!!",
+                    " Howdy Chirag Nikam!!",
                     fontSize = 16.sp,
                     fontWeight = FontWeight(700)
                 )
@@ -373,14 +438,35 @@ fun ToolbarHome(onClickRefine: () -> Unit) {
         },
         actions = {
             IconButton(onClick = { onClickRefine() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.refine),
-                    contentDescription = "refine",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.refine),
+                        contentDescription = "refine",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                    Text(
+                        text = "Refine",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         }
     )
+}
+
+@Preview
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ToolbarRefine() {
+    TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onSecondary
+        ), title = { Text(text = "Refine") },
+        navigationIcon = {
+             Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "go back", tint = MaterialTheme.colorScheme.onSecondary)
+        })
 }
 
 @Preview
@@ -413,4 +499,10 @@ fun BusinessViewPreview() {
 @Composable
 fun ToolbarPreview() {
     ToolbarHome {}
+}
+
+@Preview
+@Composable
+fun SearchBoxPreview() {
+    SearchBox()
 }

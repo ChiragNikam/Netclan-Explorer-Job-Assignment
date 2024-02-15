@@ -1,5 +1,6 @@
 package com.task.netclanexplorer
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -44,7 +45,9 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Scaffold(
                     topBar = {
-                        ToolbarHome{}
+                        ToolbarHome{
+                            startActivity(Intent(this, RefineActivity::class.java))
+                        }
                     }
                 ) {
                     PersonSwipableView(Modifier.padding(it), viewData)
