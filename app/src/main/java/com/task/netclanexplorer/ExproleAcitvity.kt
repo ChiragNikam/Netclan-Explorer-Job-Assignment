@@ -29,10 +29,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.task.netclanexplorer.UIComponents.PersonView
+import com.task.netclanexplorer.Model.PersonalViewData
+import com.task.netclanexplorer.UIComponents.PersonSwipableView
+import com.task.netclanexplorer.UIComponents.ToolbarHome
 import com.task.netclanexplorer.ui.theme.NetclanExplorerTheme
 
 class MainActivity : ComponentActivity() {
+    val viewData = PersonalViewData(name = "Kalpesh Ghorse", jobType = "Fresher Not Applicable", withinKm = "400-500 m", completeDescription = "")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,33 +44,10 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Scaffold(
                     topBar = {
-                        TopAppBar(
-                            colors = topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                            ),
-                            title = {
-                                Column {
-                                    Text(
-                                        "Howdy Chirag Nikam!!",
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight(700)
-                                    )
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Image(
-                                            modifier = Modifier.width(18.dp),
-                                            imageVector = Icons.Filled.LocationOn,
-                                            contentDescription = "location"
-                                        )
-                                        Text(text = "Manewada, Nagpur", fontSize = 14.sp)
-                                    }
-                                }
-                            }
-                        )
+                        ToolbarHome{}
                     }
                 ) {
-                    PersonView(Modifier.padding(it))
+                    PersonSwipableView(Modifier.padding(it), viewData)
                 }
             }
         }
