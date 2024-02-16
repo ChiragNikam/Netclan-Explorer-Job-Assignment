@@ -461,11 +461,11 @@ fun ToolbarHome(onClickRefine: () -> Unit) {
 fun ToolbarRefine() {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.secondary,
             titleContentColor = MaterialTheme.colorScheme.onSecondary
-        ), title = { Text(text = "Refine") },
+        ), title = { Text(modifier = Modifier.padding(start = 30.dp), text = "Refine", fontSize = 18.sp) },
         navigationIcon = {
-             Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "go back", tint = MaterialTheme.colorScheme.onSecondary)
+             Icon(modifier = Modifier.padding(start = 16.dp), imageVector = Icons.Outlined.ArrowBack, contentDescription = "go back", tint = MaterialTheme.colorScheme.onSecondary)
         })
 }
 
