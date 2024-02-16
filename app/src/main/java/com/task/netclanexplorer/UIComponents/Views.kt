@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -69,6 +68,42 @@ fun PersonSwipableView(modifier: Modifier = Modifier, viewData: PersonalViewData
 }
 
 @Composable
+fun ButtonInvite(){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+    ) {
+        TextButton(modifier = Modifier.height(36.dp), onClick = { }) {
+            Text(text = "+INVITE")
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+    }
+}
+
+@Composable
+fun StatusBar(){
+    Row(
+        modifier = Modifier
+            .width(130.dp)
+            .height(12.dp)
+            .clip(RoundedCornerShape(20.dp))
+    ) {
+        Row(
+            Modifier
+                .weight(0.5f)
+                .fillMaxHeight()
+                .background(color = MaterialTheme.colorScheme.secondary)
+        ) {}
+        Row(
+            Modifier
+                .weight(0.5f)
+                .fillMaxHeight()
+                .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+        ) {}
+    }
+}
+
+@Composable
 fun PersonalView(viewData: PersonalViewData) {
     Box(
         modifier = Modifier
@@ -94,15 +129,7 @@ fun PersonalView(viewData: PersonalViewData) {
 
                 Column(modifier = Modifier.padding(top = 6.dp, bottom = 10.dp, start = 68.dp)) {
                     // invite button
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        TextButton(modifier = Modifier.height(36.dp), onClick = { }) {
-                            Text(text = "+INVITE")
-                        }
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
+                    ButtonInvite()
 
                     // name
                     Text(
@@ -127,26 +154,8 @@ fun PersonalView(viewData: PersonalViewData) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Progress bar
-                    Row(
-                        modifier = Modifier
-                            .width(130.dp)
-                            .height(12.dp)
-                            .clip(RoundedCornerShape(20.dp))
-                    ) {
-                        Row(
-                            Modifier
-                                .weight(0.5f)
-                                .fillMaxHeight()
-                                .background(color = MaterialTheme.colorScheme.secondary)
-                        ) {}
-                        Row(
-                            Modifier
-                                .weight(0.5f)
-                                .fillMaxHeight()
-                                .background(color = MaterialTheme.colorScheme.inverseOnSurface)
-                        ) {}
-                    }
+                    // status bar
+                    StatusBar()
 
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -227,8 +236,7 @@ fun SearchBox() {
                 contentAlignment = Alignment.CenterStart
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
+                    verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
@@ -236,11 +244,14 @@ fun SearchBox() {
                         tint = Color.Gray
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Column(modifier = Modifier.widthIn(min = 290.dp, max = 290.dp)) {
+                    Column (modifier = Modifier.weight(5f)){
                         innerTextField()
                     }
-                    if (text.isNotEmpty()) {
+                    if (text.isNotBlank()) {
                         IconButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .size(22.dp),
                             onClick = { text = "" }
                         ) {
                             Icon(
@@ -281,15 +292,7 @@ fun BusinessView(viewData: PersonalViewData) {
 
                 Column(modifier = Modifier.padding(start = 68.dp)) {
                     // invite button
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        TextButton(modifier = Modifier.height(36.dp), onClick = { }) {
-                            Text(text = "+INVITE")
-                        }
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
+                    ButtonInvite()
 
                     // name
                     Text(
@@ -307,25 +310,7 @@ fun BusinessView(viewData: PersonalViewData) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     // Status bar
-                    Row(
-                        modifier = Modifier
-                            .width(130.dp)
-                            .height(12.dp)
-                            .clip(RoundedCornerShape(20.dp))
-                    ) {
-                        Row(
-                            Modifier
-                                .weight(0.5f)
-                                .fillMaxHeight()
-                                .background(color = MaterialTheme.colorScheme.secondary)
-                        ) {}
-                        Row(
-                            Modifier
-                                .weight(0.5f)
-                                .fillMaxHeight()
-                                .background(color = MaterialTheme.colorScheme.inverseOnSurface)
-                        ) {}
-                    }
+                    StatusBar()
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -455,17 +440,35 @@ fun ToolbarHome(onClickRefine: () -> Unit) {
     )
 }
 
-@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToolbarRefine() {
+fun ToolbarRefine(goBack: () -> Unit) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.secondary,
             titleContentColor = MaterialTheme.colorScheme.onSecondary
-        ), title = { Text(modifier = Modifier.padding(start = 30.dp), text = "Refine", fontSize = 18.sp) },
+        ),
+        title = {
+            Text(
+                modifier = Modifier.padding(start = 30.dp),
+                text = "Refine",
+                fontSize = 18.sp
+            )
+        },
         navigationIcon = {
-             Icon(modifier = Modifier.padding(start = 16.dp), imageVector = Icons.Outlined.ArrowBack, contentDescription = "go back", tint = MaterialTheme.colorScheme.onSecondary)
+            IconButton(
+                onClick = {
+                          goBack()
+                },
+                modifier = Modifier
+                    .padding(start = 16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ArrowBack,
+                    contentDescription = "go back",
+                    tint = MaterialTheme.colorScheme.onSecondary
+                )
+            }
         })
 }
 
