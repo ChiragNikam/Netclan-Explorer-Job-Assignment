@@ -53,22 +53,9 @@ import androidx.compose.ui.unit.sp
 import com.task.netclanexplorer.Model.PersonalViewData
 import com.task.netclanexplorer.R
 
-@Composable
-fun PersonSwipableView(modifier: Modifier = Modifier, viewData: PersonalViewData) {
-    Surface(modifier = modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            SearchBox()
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                items(5) {
-                    PersonalView(viewData)
-                }
-            }
-        }
-    }
-}
 
 @Composable
-fun ButtonInvite(){
+fun ButtonInvite() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
@@ -81,7 +68,7 @@ fun ButtonInvite(){
 }
 
 @Composable
-fun StatusBar(){
+fun StatusBar() {
     Row(
         modifier = Modifier
             .width(130.dp)
@@ -175,7 +162,8 @@ fun PersonalView(viewData: PersonalViewData) {
                     Text(
                         text = viewData.status,
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
+                        lineHeight = 14.sp
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
@@ -205,65 +193,6 @@ fun PersonalView(viewData: PersonalViewData) {
             )
         }
     }
-}
-
-@Composable
-fun SearchBox() {
-    var text by rememberSaveable {
-        mutableStateOf("")
-    }
-    BasicTextField(
-        modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp, top = 18.dp),
-        value = text,
-        maxLines = 1,
-        singleLine = true,
-        onValueChange = { text = it },
-        decorationBox = { innerTextField ->
-            Box(
-                modifier = Modifier
-                    .border(
-                        1.dp,
-                        Color.Gray,
-                        shape = RoundedCornerShape(18.dp)
-                    )
-                    .height(30.dp)
-                    .background(
-                        MaterialTheme.colorScheme.onPrimary,
-                        shape = RoundedCornerShape(18.dp)
-                    )
-                    .padding(start = 20.dp, end = 10.dp)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Search,
-                        contentDescription = "search",
-                        tint = Color.Gray
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Column (modifier = Modifier.weight(5f)){
-                        innerTextField()
-                    }
-                    if (text.isNotBlank()) {
-                        IconButton(
-                            modifier = Modifier
-                                .weight(1f)
-                                .size(22.dp),
-                            onClick = { text = "" }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Clear,
-                                contentDescription = "clear all",
-                                tint = Color.Gray
-                            )
-                        }
-                    }
-                }
-            }
-        })
 }
 
 @Composable
@@ -362,6 +291,7 @@ fun BusinessView(viewData: PersonalViewData) {
                     Text(
                         text = viewData.status,
                         fontSize = 12.sp,
+                        lineHeight = 14.sp,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -392,6 +322,190 @@ fun BusinessView(viewData: PersonalViewData) {
             )
         }
     }
+}
+
+@Composable
+fun MerchantView(viewData: PersonalViewData) {
+    Box(
+        modifier = Modifier
+            .padding(start = 20.dp)
+            .fillMaxWidth()
+            .background(
+                Color.Transparent
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(start = 30.dp, end = 8.dp)
+                .heightIn(min = 166.dp, max = 250.dp)
+                .fillMaxWidth()
+                .shadow(4.dp, shape = RoundedCornerShape(30.dp))
+                .background(
+                    MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(30.dp)
+                )
+                .padding(bottom = 10.dp)
+        ) {
+            Column {
+
+                Column(modifier = Modifier.padding(start = 68.dp)) {
+                    // invite button
+                    ButtonInvite()
+
+                    // name
+                    Text(
+                        text = viewData.name,
+                        fontWeight = FontWeight(700),
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    // location and within km range
+                    Text(
+                        text = "${viewData.location}, ${viewData.withinKm}",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Status bar
+                    StatusBar()
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // phone and profile
+                    Row {
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(22.dp)
+                                .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
+                                .padding(2.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.call),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(22.dp)
+                                .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
+                                .padding(2.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Person,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(22.dp)
+                                .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
+                                .padding(2.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.LocationOn,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                // Status
+                Text(
+                    modifier = Modifier
+                        .padding(start = 25.dp, end = 25.dp)
+                        .fillMaxWidth(),
+                    text = viewData.status,
+                    fontSize = 12.sp,
+                    lineHeight = 14.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+        // Profile Picture
+        Box(
+            modifier = Modifier
+                .padding(top = 30.dp)
+                .shadow(8.dp, shape = RoundedCornerShape(12.dp))
+                .background(color = MaterialTheme.colorScheme.primaryContainer)
+                .padding(start = 20.dp, end = 20.dp, top = 25.dp, bottom = 20.dp)
+        ) {
+            Text(
+                text = "KG",
+                fontSize = 26.sp,
+                fontWeight = FontWeight(700),
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+}
+
+
+@Composable
+fun SearchBox() {
+    var text by rememberSaveable {
+        mutableStateOf("")
+    }
+    BasicTextField(
+        modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp, top = 18.dp),
+        value = text,
+        maxLines = 1,
+        singleLine = true,
+        onValueChange = { text = it },
+        decorationBox = { innerTextField ->
+            Box(
+                modifier = Modifier
+                    .border(
+                        1.dp,
+                        Color.Gray,
+                        shape = RoundedCornerShape(18.dp)
+                    )
+                    .height(30.dp)
+                    .background(
+                        MaterialTheme.colorScheme.onPrimary,
+                        shape = RoundedCornerShape(18.dp)
+                    )
+                    .padding(start = 20.dp, end = 10.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = "search",
+                        tint = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column(modifier = Modifier.weight(5f)) {
+                        innerTextField()
+                    }
+                    if (text.isNotBlank()) {
+                        IconButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .size(22.dp),
+                            onClick = { text = "" }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = "clear all",
+                                tint = Color.Gray
+                            )
+                        }
+                    }
+                }
+            }
+        })
 }
 
 // Toolbar with refine option menu
@@ -458,7 +572,7 @@ fun ToolbarRefine(goBack: () -> Unit) {
         navigationIcon = {
             IconButton(
                 onClick = {
-                          goBack()
+                    goBack()
                 },
                 modifier = Modifier
                     .padding(start = 16.dp)

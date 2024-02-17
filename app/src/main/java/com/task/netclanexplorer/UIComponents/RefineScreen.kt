@@ -55,7 +55,7 @@ import kotlin.io.path.Path
 @Composable
 fun RefineScreen(modifier: Modifier = Modifier) {
 
-    val listofAvailablity = listOf<String>(
+    val listofAvailablity = listOf(
         "Available | Hey Let Us Connect",
         "Away | Stay Discrete And Watch",
         "Busy | Do Not Disturb | Will catch up later",
